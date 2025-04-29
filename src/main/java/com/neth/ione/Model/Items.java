@@ -26,5 +26,5 @@ public class Items {
 
     @Column(nullable = false)
     private BigDecimal price;
-
+//r
 }
