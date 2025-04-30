@@ -22,5 +22,34 @@
     <button type="submit">Add to Invoice</button>
 </form>
 
+<hr>
+
+<h3>Invoice Items</h3>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Item ID</th>
+        <th>Model</th>
+        <th>Color</th>
+        <th>Storage</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="item : ${tempItems}">
+        <td th:text="${item.itemId}"></td>
+        <td th:text="${item.model}"></td>
+        <td th:text="${item.color}"></td>
+        <td th:text="${item.storage}"></td>
+        <td th:text="${item.price}"></td>
+        <td th:text="${item.quantity}"></td>
+        <td th:text="${item.total}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
 </body>
 </html>

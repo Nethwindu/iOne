@@ -18,6 +18,7 @@ import java.util.Optional;
 @Controller
 @RequestMapping("/invoice")
 public class InvoiceController {
+
     @Autowired
     private ItemsService itemsService;
 
@@ -35,18 +36,14 @@ public class InvoiceController {
         return "invoice";
     }
 
-    // after pressinf add itms
     @PostMapping("/add")
-    public String addItemToInvoice(@RequestParam("item") int itemId,
-                                   @RequestParam("quantity") int quantity,
-                                   Model model) {
+    public String addItemToInvoice(@RequestParam("itemId") int itemId, @RequestParam("quantity") int quantity, Model model) {
 
         Optional<Items> optionalItem = itemsService.getItemById(itemId);
 
         if (optionalItem.isPresent()) {
             Items selectedItem = optionalItem.get();
 
-            // Now you can safely use selectedItem to create TempInvoiceItems
             TempInvoiceItems temp = new TempInvoiceItems();
             temp.setItemId(selectedItem.getId());
             temp.setModel(selectedItem.getModel());
@@ -59,19 +56,14 @@ public class InvoiceController {
             tempInvoiceItems.add(temp);
 
         } else {
-            // Handle case where item is not found
             System.out.println("Item not found with ID: " + itemId);
             // Optionally show an error message in the UI
         }
 
-
-        tempInvoiceItems.add(tempItems);
-
         model.addAttribute("items", itemsService.getAllItems());
         model.addAttribute("tempItems", tempInvoiceItems);
 
-        return "invoice";
+        // todo: update invoice total
+        return "redirect:/invoice";
     }
-
-
 }
