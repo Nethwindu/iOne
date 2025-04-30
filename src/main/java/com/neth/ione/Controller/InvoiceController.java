@@ -61,7 +61,7 @@ public class InvoiceController {
         } else {
             // Handle case where item is not found
             System.out.println("Item not found with ID: " + itemId);
-            // Optionally return an error page or redirect
+            // Optionally show an error message in the UI
         }
 
 
