@@ -6,22 +6,21 @@
 <body>
 <h2>Create Invoice</h2>
 
-<form>
+<form th:action="@{/invoice/add}" method="post">
     <label for="item">Select Item:</label>
-    <select id="item" name="item">
-        <option value="" disabled selected>-- Select an item --</option>
+    <select id="item" name="itemId" required>
+        <option value="" disabled selected> -SELECT AN ITEM- </option>
         <option th:each="item : ${items}"
                 th:value="${item.id}"
                 th:text="${item.model + ' - ' + item.color + ' - ' + item.storage}">
         </option>
     </select>
 
-    <!-- Quantity Input -->
     <label for="quantity">Qty:</label>
-    <input type="number" id="quantity" name="quantity" min="1" value="1">
+    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
 
-    <!-- For now, no dynamic JS calculation. We'll do that later -->
     <button type="submit">Add to Invoice</button>
 </form>
+
 </body>
 </html>
