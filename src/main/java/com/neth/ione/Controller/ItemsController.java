@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/items")
 public class ItemsController {
@@ -49,6 +51,8 @@ public class ItemsController {
         itemsService.deleteItem(id);
         return "redirect:/items/all";
     }
+
+
 
 
 }
