@@ -6,6 +6,7 @@
 <body>
 <h2>Create Invoice</h2>
 
+/* todo: select2 */
 <form th:action="@{/invoice/add}" method="post">
     <label for="item">Select Item:</label>
     <select id="item" name="itemId" required>
@@ -35,6 +36,7 @@
         <th>Price</th>
         <th>Quantity</th>
         <th>Total</th>
+        <th>Actions</th>
     </tr>
     </thead>
     <tbody>
@@ -46,9 +48,20 @@
         <td th:text="${item.price}"></td>
         <td th:text="${item.quantity}"></td>
         <td th:text="${item.total}"></td>
+        <td>
+            <!-- delete Link -->
+            <a th:href="@{'/invoice/delete/' + ${item.itemId}}"
+               class="action-link text-danger"
+               onclick="return confirm('Are you sure you want to delete this item?');">
+                <i class="bi bi-trash"></i> Delete
+            </a>
+        </td>
     </tr>
     </tbody>
 </table>
+
+<hr>
+<p><strong>Grand Total:</strong> Rs. <span th:text="${grandTotal}">0.00</span></p>
 
 
 </body>
