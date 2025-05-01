@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customers</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="p-4">
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>Customer List</h2>
+        <a class="btn btn-primary" th:href="@{/customers/add}">+ Add New Customer</a>
+    </div>
+
+    <table class="table table-bordered table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th>Name</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cust : ${customerList}">
+            <td th:text="${cust.firstName + ' ' + cust.lastName}">John Doe</td>
+            <td th:text="${cust.company}">Company Name</td>
+            <td>
+                <span th:if="${cust.status.name() == 'ACTIVE'}" class="badge bg-success">Active</span>
+                <span th:if="${cust.status.name() == 'INACTIVE'}" class="badge bg-danger">Inactive</span>
+            </td>
+            <td>
+                <a class="btn btn-info btn-sm" th:href="@{/customers/details/{id}(id=${cust.customerId})}">View</a>
+                <a class="btn btn-warning btn-sm" th:href="@{/customers/edit/{id}(id=${cust.customerId})}">Edit</a>
+                <a class="btn btn-danger btn-sm" th:href="@{/customers/delete/{id}(id=${cust.customerId})}">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

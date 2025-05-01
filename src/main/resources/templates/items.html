@@ -194,6 +194,7 @@
                             <td th:text="${item.model}"></td>
                             <td th:text="${item.color}"></td>
                             <td th:text="${item.storage}"></td>
+<!--                            price comma edit-->
                             <td th:text="${'Rs. ' + #numbers.formatDecimal(item.price, 1, 2, 'COMMA')}"></td>
                             <td>
                                 <a th:href="@{'/items/edit/' + ${item.id}}" class="action-link">

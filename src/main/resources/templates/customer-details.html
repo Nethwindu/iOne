@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Customer Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+</head>
+<body class="p-4">
+<div class="container">
+    <h2>Customer Details</h2>
+    <table class="table table-bordered mt-4">
+        <tr>
+            <th>Full Name</th>
+            <td th:text="${customer.firstName + ' ' + customer.lastName}">John Doe</td>
+        </tr>
+        <tr>
+            <th>Company</th>
+            <td th:text="${customer.company}">Company Name</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td th:text="${customer.email}">john@example.com</td>
+        </tr>
+        <tr>
+            <th>Phone</th>
+            <td th:text="${customer.phone}">1234567890</td>
+        </tr>
+        <tr>
+            <th>Address</th>
+            <td th:text="${customer.address}">123 Street Name</td>
+        </tr>
+        <tr>
+            <th>Register Date</th>
+            <td th:text="${customer.registerDate}">2025-05-01</td>
+        </tr>
+        <tr>
+            <th>Status</th>
+            <td>
+                <span th:if="${customer.status.name() == 'ACTIVE'}" class="badge bg-success">Active</span>
+                <span th:if="${customer.status.name() == 'INACTIVE'}" class="badge bg-danger">Inactive</span>
+            </td>
+        </tr>
+    </table>
+
+    <a th:href="@{/customers}" class="btn btn-secondary">Back to List</a>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
+</body>
+</html>
