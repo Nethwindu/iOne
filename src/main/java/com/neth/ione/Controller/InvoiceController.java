@@ -8,6 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,8 @@ public class InvoiceController {
     private List<TempInvoiceItems> tempInvoiceItems = new ArrayList<>();
 
     double amountPaid = 0.0;
+    private String checkoutTime = null;
+
 
     @GetMapping
     public String showInvoicePage(Model model) {
@@ -46,6 +50,15 @@ public class InvoiceController {
         balance = amountPaid - grandTotal;
         model.addAttribute("balance", balance);
         model.addAttribute("amountPaid", amountPaid);
+
+
+        //handling null of datetime
+        if (checkoutTime != null) {
+            model.addAttribute("checkoutTime", checkoutTime);
+        } else {
+            model.addAttribute("checkoutTime", "-"); // or leave it out if you prefer
+        }
+
 
 
         return "invoice";
@@ -111,8 +124,15 @@ public class InvoiceController {
         model.addAttribute("amountPaid", amountPaid);  // The amount the user entered
         model.addAttribute("tempItems", tempInvoiceItems); // List of items on the invoice
 
+        //date and time
+        LocalDateTime now = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.checkoutTime = now.format(formatter);
+
         // Redirect the user back to the invoice page with updated values
         return "redirect:/invoice";  // This reloads the invoice page with the updated data
+
+
     }
 
 

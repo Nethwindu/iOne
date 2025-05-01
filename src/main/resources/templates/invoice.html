@@ -2,36 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Invoice</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 </head>
-<body>
-<a href="/items/all">ITEMS</a> |
-<a href="/items/add">NEW ITEM</a>
-<hr>
-<h2>Create Invoice</h2>
+<body class="container py-4">
 
+<!-- Navigation -->
+<div class="mb-3">
+    <a href="/items/all" class="btn btn-link">ITEMS</a>
+    <a href="/items/add" class="btn btn-link">NEW ITEM</a>
+</div>
 
-<form th:action="@{/invoice/add}" method="post">
-    <label for="item" >Select Item:</label>
-    <select id="item" name="itemId" required>
-        <option value="" disabled selected> -SELECT AN ITEM- </option>
-        <option th:each="item : ${items}"
-                th:value="${item.id}"
-                th:text="${item.model + ' - ' + item.color + ' - ' + item.storage}">
-        </option>
-    </select>
+<h2 class="mb-4">Create Invoice</h2>
 
-    <label for="quantity">Qty:</label>
-    <input type="number" id="quantity" name="quantity" min="1" value="1" required>
+<!-- Invoice Form -->
+<form th:action="@{/invoice/add}" method="post" class="row g-3 align-items-end mb-4">
+    <div class="col-md-6">
+        <label for="itemSelect" class="form-label">Select Item:</label>
+        <select id="itemSelect" name="itemId" class="form-control" required>
+            <option></option> <!-- Placeholder -->
+            <option th:each="item : ${items}"
+                    th:value="${item.id}"
+                    th:text="${item.model + ' | ' + item.color + ' | ' + item.storage}">
+            </option>
+        </select>
+    </div>
 
-    <button type="submit">Add to Invoice</button>
+    <div class="col-md-3">
+        <label for="quantity" class="form-label">Qty:</label>
+        <input type="number" id="quantity" name="quantity" min="1" value="1" required class="form-control" />
+    </div>
+
+    <div class="col-md-3">
+        <button type="submit" class="btn btn-primary w-100">Add to Invoice</button>
+    </div>
 </form>
 
 <hr>
 
+<!-- Invoice Items Table -->
 <h3>Invoice Items</h3>
-<table border="1" class="table table-hover">
-    <thead>
+<table class="table table-hover table-bordered">
+    <thead class="table-light">
     <tr>
         <th>Item ID</th>
         <th>Model</th>
@@ -53,37 +70,48 @@
         <td th:text="${item.quantity}"></td>
         <td th:text="${item.total}"></td>
         <td>
-            <!-- delete Link -->
-            <a th:href="@{'/invoice/delete/' + ${item.itemId}}"
-               class="action-link text-danger"
-               onclick="return confirm('Are you sure you want to delete this item?');">
-                <i class="bi bi-trash"></i> Delete
-            </a>
+            <a th:href="@{'/invoice/delete/' + ${item.itemId}}" class="text-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</a>
         </td>
     </tr>
     </tbody>
 </table>
 
+<!-- Summary -->
 <hr>
-<!-- Grand Total -->
-<p><strong>Grand Total:</strong> Rs. <span th:text="${grandTotal}">0.00</span></p>
+<h3><strong>Grand Total:</strong> Rs. <span th:text="${grandTotal}">0.00</span></h3>
 
-<!-- Amount Paid Form -->
-<form th:action="@{/invoice/updateAmountPaid}" method="post">
-    <label for="amountPaid">Amount Paid:</label>
-    <input type="number" step="0.01" id="amountPaid" name="amountPaid" th:value="${amountPaid}" required placeholder="Enter amount paid" />
-
-    <button type="submit">Update Amount Paid</button>
+<!-- Amount Paid -->
+<form th:action="@{/invoice/updateAmountPaid}" method="post" class="row g-3 align-items-end mb-3">
+    <div class="col-md-4">
+        <label for="amountPaid" class="form-label">Amount Paid:</label>
+        <input type="number" step="0.01" id="amountPaid" name="amountPaid"
+               th:value="${amountPaid}" required placeholder="Enter amount paid" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <button type="submit" class="btn btn-secondary w-100">Update</button>
+    </div>
 </form>
 
-<!-- Balance Calculation -->
-<p><strong>Balance:</strong> Rs. <span th:text="${balance}"></span></p>
+<p><strong>Balance:</strong> Rs. <span th:text="${balance}">0.00</span></p>
+<p><strong>Checkout Time:</strong> <span th:text="${checkoutTime}">-</span></p>
 
-<hr>
-
-<!-- Checkout Button -->
 <a href="/checkout" class="btn btn-success">Checkout</a>
 
+<!-- JS Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq"
+        crossorigin="anonymous"></script>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $('#itemSelect').select2({
+            placeholder: "Select an item",
+            width: '100%'
+        });
+    });
+</script>
 </body>
 </html>
