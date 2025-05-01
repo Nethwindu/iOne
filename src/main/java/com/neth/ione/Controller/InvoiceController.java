@@ -22,7 +22,7 @@ public class InvoiceController {
     // temporary invoice table items list
     private List<TempInvoiceItems> tempInvoiceItems = new ArrayList<>();
 
-
+    double amountPaid = 0.0;
 
     @GetMapping
     public String showInvoicePage(Model model) {
@@ -42,8 +42,8 @@ public class InvoiceController {
 
         //balance and amount paid
         double balance;
-        double amountPaid = 0.0;
-        balance = grandTotal - amountPaid;
+
+        balance = amountPaid - grandTotal;
         model.addAttribute("balance", balance);
         model.addAttribute("amountPaid", amountPaid);
 
@@ -91,6 +91,30 @@ public class InvoiceController {
         //todo: solve refresh problem
         return "redirect:/invoice";
     }
+
+    @PostMapping("/updateAmountPaid")
+    public String updateAmountPaid(@RequestParam("amountPaid") double amountPaid, Model model) {
+        this.amountPaid = amountPaid;  // Store the amount paid in the controller
+
+        // Recalculate the grand total by summing up the total of all temporary invoice items
+        double grandTotal = 0.0;
+        for (TempInvoiceItems item : tempInvoiceItems) {
+            grandTotal += item.getTotal();  // Add up each item's total cost
+        }
+
+        // Recalculate the balance: balance = grandTotal - amountPaid
+        double balance = amountPaid - grandTotal;
+
+        // Add the updated values to the model so they can be displayed on the page
+        model.addAttribute("grandTotal", grandTotal);  // Total of all items
+        model.addAttribute("balance", balance);        // Remaining balance (grandTotal - amountPaid)
+        model.addAttribute("amountPaid", amountPaid);  // The amount the user entered
+        model.addAttribute("tempItems", tempInvoiceItems); // List of items on the invoice
+
+        // Redirect the user back to the invoice page with updated values
+        return "redirect:/invoice";  // This reloads the invoice page with the updated data
+    }
+
 
 }
 

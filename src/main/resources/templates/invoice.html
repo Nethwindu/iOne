@@ -2,13 +2,17 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Invoice</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
 </head>
 <body>
+<a href="/items/all">ITEMS</a> |
+<a href="/items/add">NEW ITEM</a>
+<hr>
 <h2>Create Invoice</h2>
 
-/* todo: select2 */
+
 <form th:action="@{/invoice/add}" method="post">
-    <label for="item">Select Item:</label>
+    <label for="item" >Select Item:</label>
     <select id="item" name="itemId" required>
         <option value="" disabled selected> -SELECT AN ITEM- </option>
         <option th:each="item : ${items}"
@@ -26,7 +30,7 @@
 <hr>
 
 <h3>Invoice Items</h3>
-<table border="1">
+<table border="1" class="table table-hover">
     <thead>
     <tr>
         <th>Item ID</th>
@@ -61,7 +65,24 @@
 </table>
 
 <hr>
+<!-- Grand Total -->
 <p><strong>Grand Total:</strong> Rs. <span th:text="${grandTotal}">0.00</span></p>
+
+<!-- Amount Paid Form -->
+<form th:action="@{/invoice/updateAmountPaid}" method="post">
+    <label for="amountPaid">Amount Paid:</label>
+    <input type="number" step="0.01" id="amountPaid" name="amountPaid" th:value="${amountPaid}" required placeholder="Enter amount paid" />
+
+    <button type="submit">Update Amount Paid</button>
+</form>
+
+<!-- Balance Calculation -->
+<p><strong>Balance:</strong> Rs. <span th:text="${balance}"></span></p>
+
+<hr>
+
+<!-- Checkout Button -->
+<a href="/checkout" class="btn btn-success">Checkout</a>
 
 
 </body>
