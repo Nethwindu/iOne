@@ -2,45 +2,112 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Customers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link th:href="@{/assets/styles-invoice.css}" rel="stylesheet">
 </head>
-<body class="p-4">
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>Customer List</h2>
-        <a class="btn btn-primary" th:href="@{/customers/add}">+ Add New Customer</a>
+<body>
+<div class="container-fluid">
+    <!-- Fixed Sidebar -->
+    <div class="sidebar d-flex flex-column flex-shrink-0 p-3">
+        <a href="/invoice" class="d-flex ms-4 text-decoration-none">
+            <span class="fs-4 fw-bold text-white">iOne</span>
+        </a>
+        <hr class="text-white-50">
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/invoice" class="nav-link">
+                    <i class="bi bi-receipt me-2"></i>
+                    INVOICE
+                </a>
+            </li>
+            <li>
+                <a href="/items/all" class="nav-link">
+                    <i class="bi bi-phone me-2"></i>
+                    ITEMS
+                </a>
+            </li>
+            <li>
+                <a href="/customers" class="nav-link active">
+                    <i class="bi bi-people me-2"></i>
+                    CUSTOMERS
+                </a>
+            </li>
+            <li>
+                <a href="invoice/history" class="nav-link">
+                    <i class="bi bi-clock-history me-2"></i>
+                    HISTORY
+                </a>
+            </li>
+        </ul>
+        <hr class="text-white-50">
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+                <img src="https://github.com/mdo.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong class="text-white">Admin</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow">
+                <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                <li><a class="dropdown-item" href="#"><i class="bi bi-person me-2"></i>Profile</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="login-test-1"><i class="bi bi-box-arrow-right me-2"></i>Sign out</a></li>
+            </ul>
+        </div>
     </div>
 
-    <table class="table table-bordered table-hover">
-        <thead class="table-dark">
-        <tr>
-            <th>Name</th>
-            <th>Company</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="cust : ${customerList}">
-            <td th:text="${cust.firstName + ' ' + cust.lastName}">John Doe</td>
-            <td th:text="${cust.company}">Company Name</td>
-            <td>
-                <span th:if="${cust.status.name() == 'ACTIVE'}" class="badge bg-success">Active</span>
-                <span th:if="${cust.status.name() == 'INACTIVE'}" class="badge bg-danger">Inactive</span>
-            </td>
-            <td>
-                <a class="btn btn-info btn-sm" th:href="@{/customers/details/{id}(id=${cust.customerId})}">View</a>
-                <a class="btn btn-warning btn-sm" th:href="@{/customers/edit/{id}(id=${cust.customerId})}">Edit</a>
-                <a class="btn btn-danger btn-sm"
-                   th:href="@{/customers/delete/{id}(id=${cust.customerId})}"
-                   onclick="return confirm('Are you sure you want to delete this customer?');">
-                    Delete
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-box">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="text-primary mb-0">Customer List</h1>
+                <a th:href="@{/customers/add}" class="btn btn-custom">
+                    <i class="bi bi-plus-circle me-2"></i>Add New Customer
                 </a>
+            </div>
 
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            <div class="table-responsive">
+                <table class="table table-hover table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Company</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="cust : ${customerList}">
+                        <td th:text="${cust.firstName + ' ' + cust.lastName}">John Doe</td>
+                        <td th:text="${cust.company}">Company Name</td>
+                        <td>
+                                <span th:if="${cust.status.name() == 'ACTIVE'}"
+                                      class="badge bg-success">Active</span>
+                            <span th:if="${cust.status.name() == 'INACTIVE'}"
+                                  class="badge bg-danger">Inactive</span>
+                        </td>
+                        <td>
+                            <a th:href="@{/customers/details/{id}(id=${cust.customerId})}"
+                               class="btn btn-sm btn-custom me-2">
+                                <i class="bi bi-eye me-1"></i>View
+                            </a>
+                            <a th:href="@{/customers/edit/{id}(id=${cust.customerId})}"
+                               class="btn btn-sm btn-custom me-2">
+                                <i class="bi bi-pencil-square me-1"></i>Edit
+                            </a>
+                            <a th:href="@{/customers/delete/{id}(id=${cust.customerId})}"
+                               class="btn btn-sm btn-delete"
+                               onclick="return confirm('Are you sure?');">
+                                <i class="bi bi-trash me-1"></i>Delete
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
