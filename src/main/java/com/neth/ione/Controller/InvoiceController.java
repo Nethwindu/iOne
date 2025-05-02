@@ -74,7 +74,7 @@ public class InvoiceController {
         if (checkoutTime != null) {
             model.addAttribute("checkoutTime", checkoutTime);
         } else {
-            model.addAttribute("checkoutTime", "-"); // or leave it out if you prefer
+            model.addAttribute("checkoutTime", " ~");
         }
 
         // CUTOMER DROPDOWN
@@ -130,25 +130,25 @@ public class InvoiceController {
 
     @PostMapping("/updateAmountPaid")
     public String updateAmountPaid(@RequestParam("amountPaid") double amountPaid,@RequestParam("customerId") int customerId,  Model model) {
-        this.amountPaid = amountPaid;  // Store the amount paid in the controller
+        this.amountPaid = amountPaid;  // store the amount paid in the controller
 
         //selected part
         this.selectedCustomerId = customerId;
 
-        // Recalculate the grand total by summing up the total of all temporary invoice items
+        // recalculating the grand total
         double grandTotal = 0.0;
         for (TempInvoiceItems item : tempInvoiceItems) {
             grandTotal += item.getTotal();  // Add up each item's total cost
         }
 
-        // Recalculate the balance: balance = grandTotal - amountPaid
+        // balace calulating again : balance = grandTotal - amountPaid
         double balance = amountPaid - grandTotal;
 
         // Add the updated values to the model so they can be displayed on the page
-        model.addAttribute("grandTotal", grandTotal);  // Total of all items
-        model.addAttribute("balance", balance);        // Remaining balance (grandTotal - amountPaid)
-        model.addAttribute("amountPaid", amountPaid);  // The amount the user entered
-        model.addAttribute("tempItems", tempInvoiceItems); // List of items on the invoice
+        model.addAttribute("grandTotal", grandTotal);
+        model.addAttribute("balance", balance);
+        model.addAttribute("amountPaid", amountPaid);
+        model.addAttribute("tempItems", tempInvoiceItems);
 
         //date and time
         LocalDateTime now = LocalDateTime.now();
@@ -156,8 +156,8 @@ public class InvoiceController {
         this.checkoutTime = now.format(formatter);
 
 
-        // Redirect the user back to the invoice page with updated values
-        return "redirect:/invoice";  // This reloads the invoice page with the updated data
+        //to the invoice page with updated values
+        return "redirect:/invoice";
 
 
     }
@@ -165,7 +165,6 @@ public class InvoiceController {
     // after hitting checkout
     @PostMapping("/checkout")
     public String finalizeCheckout() {
-        // Calculate grand total from the temp items
         double grandTotal = 0.0;
         for (TempInvoiceItems item : tempInvoiceItems) {
             grandTotal += item.getTotal();
@@ -173,10 +172,10 @@ public class InvoiceController {
 
         double balance = amountPaid - grandTotal;
 
-        // Get the selected customer
+        // get the selected customer
         Customers customer = customersService.getCustomerById(selectedCustomerId);
 
-        // Convert checkoutTime string back to LocalDateTime
+        // convert checkoutTime string back to LocalDateTime
         LocalDateTime checkoutDateTime = LocalDateTime.parse(checkoutTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
         // Save to DB
