@@ -7,11 +7,11 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h2 th:text="${customer.customerId == null ? 'Add New Customer' : 'Edit Customer'}"></h2>
+    <h2 th:text="${pageTitle}">Add or Edit</h2>
 
     <!-- Same form for Add and Edit -->
     <form th:action="@{/customers/save}" th:object="${customer}" method="post">
-
+        <input type="hidden" th:field="*{customerId}" />
         <div class="row mb-3">
             <div class="col">
                 <label for="firstName" class="form-label">First Name</label>
