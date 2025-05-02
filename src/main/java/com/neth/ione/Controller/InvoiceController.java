@@ -1,7 +1,12 @@
 package com.neth.ione.Controller;
 
+import com.neth.ione.Model.CheckoutHistory;
+import com.neth.ione.Model.Customers;
 import com.neth.ione.Model.Items;
 import com.neth.ione.Model.TempInvoiceItems;
+import com.neth.ione.Repository.CheckoutHistoryRepo;
+import com.neth.ione.Service.CheckoutHistoryService;
+import com.neth.ione.Service.CustomersService;
 import com.neth.ione.Service.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,12 +25,25 @@ public class InvoiceController {
 
     @Autowired
     private ItemsService itemsService;
+    @Autowired
+    private CustomersService customersService;
+    @Autowired
+    private CheckoutHistoryService checkoutHistoryService;
+    @Autowired
+    private CheckoutHistoryRepo checkoutHistoryRepo;
+//    @Autowired
+//    private CheckoutHistory checkoutHistory;
+
 
     // temporary invoice table items list
     private List<TempInvoiceItems> tempInvoiceItems = new ArrayList<>();
 
     double amountPaid = 0.0;
     private String checkoutTime = null;
+
+    // todo: not sure comebak later
+    private int selectedCustomerId = -1;
+
 
 
     @GetMapping
@@ -59,9 +77,14 @@ public class InvoiceController {
             model.addAttribute("checkoutTime", "-"); // or leave it out if you prefer
         }
 
+        // CUTOMER DROPDOWN
+        List<Customers> customersList = customersService.getAllCustomers();
+        model.addAttribute("customersList", customersList);
 
+        // passing the selected customerId to keep it selected
+        model.addAttribute("selectedCustomerId", selectedCustomerId);
 
-        return "invoice";
+        return "invoice/invoice";
     }
 
     // after the submition - add item
@@ -106,8 +129,11 @@ public class InvoiceController {
     }
 
     @PostMapping("/updateAmountPaid")
-    public String updateAmountPaid(@RequestParam("amountPaid") double amountPaid, Model model) {
+    public String updateAmountPaid(@RequestParam("amountPaid") double amountPaid,@RequestParam("customerId") int customerId,  Model model) {
         this.amountPaid = amountPaid;  // Store the amount paid in the controller
+
+        //selected part
+        this.selectedCustomerId = customerId;
 
         // Recalculate the grand total by summing up the total of all temporary invoice items
         double grandTotal = 0.0;
@@ -129,13 +155,57 @@ public class InvoiceController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         this.checkoutTime = now.format(formatter);
 
+
         // Redirect the user back to the invoice page with updated values
         return "redirect:/invoice";  // This reloads the invoice page with the updated data
 
 
     }
 
+    // after hitting checkout
+    @PostMapping("/checkout")
+    public String finalizeCheckout() {
+        // Calculate grand total from the temp items
+        double grandTotal = 0.0;
+        for (TempInvoiceItems item : tempInvoiceItems) {
+            grandTotal += item.getTotal();
+        }
+
+        double balance = amountPaid - grandTotal;
+
+        // Get the selected customer
+        Customers customer = customersService.getCustomerById(selectedCustomerId);
+
+        // Convert checkoutTime string back to LocalDateTime
+        LocalDateTime checkoutDateTime = LocalDateTime.parse(checkoutTime, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+        // Save to DB
+        checkoutHistoryService.saveCheckout(grandTotal, amountPaid, balance, customer, checkoutDateTime);
+
+        // clear all after checkout
+        tempInvoiceItems.clear();
+        amountPaid = 0.0;
+        selectedCustomerId = -1;
+        checkoutTime = null;
+
+        return "checkout/success";
+    }
+
+    @GetMapping("/history")
+    public String getCheckoutHistory(Model model) {
+        // getting values from checkoutHistory
+        List<CheckoutHistory> checkoutHistoryList = checkoutHistoryRepo.findAll();
+
+        model.addAttribute("checkoutHistoryList", checkoutHistoryList);
+
+        return "checkout/history";
+    }
+
+
+
+
+
 
 }
 
-// todo: update invoice total
+// todo: comma prob

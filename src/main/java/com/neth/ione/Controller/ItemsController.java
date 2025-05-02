@@ -7,8 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @Controller
 @RequestMapping("/items")
 public class ItemsController {
@@ -20,7 +18,7 @@ public class ItemsController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("item", new Items());
-        return "add-item";
+        return "items/add-item";
     }
 
     // AFTER HITTING SUBMIT
@@ -34,7 +32,7 @@ public class ItemsController {
     @GetMapping("/all")
     public String viewItemsList(Model model) {
         model.addAttribute("itemsList", itemsService.getAllItems());
-        return "items";
+        return "items/items";
     }
 
     // EDITING ITEM
@@ -42,7 +40,7 @@ public class ItemsController {
     public String editItem(@PathVariable int id, Model model) {
         Items item = itemsService.getItemById(id).orElse(null);
         model.addAttribute("item", item);
-        return "add-item";
+        return "items/add-item";
     }
 
     // DELETING ITEM

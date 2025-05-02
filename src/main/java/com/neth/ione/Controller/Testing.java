@@ -8,6 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class Testing {
     @RequestMapping
     public String test(){
-        return "test";
+        return "test/test";
     }
 }

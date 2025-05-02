@@ -2,7 +2,6 @@ package com.neth.ione.Controller;
 
 import com.neth.ione.Model.Customers;
 import com.neth.ione.Service.CustomersService;
-import com.neth.ione.Service.ItemsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +18,7 @@ public class CustomersController {
     @GetMapping
     public String showCustomersPage(Model model) {
         model.addAttribute("customerList", customersService.getAllCustomers());
-        return "customers";
+        return "customers/customers";
     }
 
     // form
@@ -28,7 +27,7 @@ public class CustomersController {
         model.addAttribute("customer", new Customers());
         //title when adding
         model.addAttribute("pageTitle", "Add New Customer");
-        return "add-customer";
+        return "customers/add-customer";
     }
 
     // both add and update
@@ -43,7 +42,7 @@ public class CustomersController {
     public String viewCustomer(@PathVariable int id, Model model) {
         Customers customer = customersService.getCustomerById(id);
         model.addAttribute("customer", customer);
-        return "customer-details"; // the name of the HTML file
+        return "customers/customer-details"; // the name of the HTML file
     }
 
     // 'edit' button on the customer page (with already filled form)
@@ -53,7 +52,7 @@ public class CustomersController {
         model.addAttribute("customer", customer);
         //title when editing
         model.addAttribute("pageTitle", "Edit Customer");
-        return "add-customer";
+        return "customers/add-customer";
     }
 
     // todo: delete
