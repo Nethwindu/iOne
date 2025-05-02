@@ -14,7 +14,7 @@ public class CustomersController {
     @Autowired
     private CustomersService customersService;
 
-    // "/customer"
+    // just "/customer"
     @GetMapping
     public String showCustomersPage(Model model) {
         model.addAttribute("customerList", customersService.getAllCustomers());
