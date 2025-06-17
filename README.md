@@ -61,7 +61,7 @@ This project provides a complete POS solution with modern web technologies. Key 
 
 ### Prerequisites
 
-- Java JDK 17+
+- Java JDK 17+ (21 is used here)
 - Maven 3.8+
 - MySQL 8.0+ (or your preferred database)
 
