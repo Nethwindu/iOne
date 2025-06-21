@@ -58,6 +58,8 @@ This project provides a complete POS solution with modern web technologies. Key 
 ---
 
 ## Getting Started
+### Demo
+https://github.com/user-attachments/assets/bd9c2e15-4a91-40f2-8bb6-0009b17656b5
 
 ### Prerequisites
 
