@@ -61,7 +61,10 @@ This project provides a complete POS solution with modern web technologies. Key 
 ### Demo
 #### Dashboard (Placing Orders)
 https://github.com/user-attachments/assets/bd9c2e15-4a91-40f2-8bb6-0009b17656b5
+
 #### Navigation
+https://github.com/user-attachments/assets/d38a6d34-cd46-4a37-a0a7-ed0d1b2521c9
+
 
 ### Prerequisites
 
