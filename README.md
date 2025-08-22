@@ -1,7 +1,8 @@
 
 <div align="center">
 
-#  iOne
+<img src="src/main/resources/static/assets/logo.png" alt="iOne Logo" width="200" height="auto">
+<br>    
 
 **Empowering seamless management for your business success**  
 *A modern Point of Sale system built with Spring Boot*
